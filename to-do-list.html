@@ -9,17 +9,17 @@
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            background: linear-gradient(135deg, #fad0c4, #c09ce9);
             color: #333;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
         }
 
         .todo-container {
             width: 400px;
-            background: white;
+            background: #77527c;
             border-radius: 12px;
             padding: 20px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -29,8 +29,10 @@
         }
 
         h1 {
-            color: #e74c3c;
+            color: #ffffff;
             font-size: 1.8rem;
+            text-shadow: 2px 2px 5px #3d3a3a;
+            text-decoration-line: underline;
         }
 
         input, button {
@@ -47,14 +49,14 @@
         }
 
         button {
-            background: #e74c3c;
+            background: #4e3454;
             color: white;
             cursor: pointer;
             transition: background 0.3s;
         }
 
         button:hover {
-            background: #c0392b;
+            background: #ffb9b9;
         }
 
         .todo-list {
@@ -64,7 +66,7 @@
         }
 
         .todo-list li {
-            background: #f8f8f8;
+            background: #eba4de;
             padding: 10px;
             border-radius: 6px;
             display: flex;
@@ -72,6 +74,7 @@
             align-items: center;
             margin-bottom: 10px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            
         }
 
         .deadline {
@@ -80,13 +83,24 @@
         }
 
         .overdue {
-            color: red;
+            color: #aa00b0;
             font-weight: bold;
         }
 
         .due-soon {
             color: orange;
             font-weight: bold;
+        }
+
+        /* Delete Overdue Tasks Button */
+        #deleteOverdueBtn {
+            margin-top: 10px;
+            background: #aa0bb0;
+            font-weight: bold;
+        }
+
+        #deleteOverdueBtn:hover {
+            background: #ffb9b9;
         }
     </style>
 </head>
@@ -98,16 +112,17 @@
         <input type="time" id="deadlineTime">
         <button id="addTaskBtn">Add Task</button>
         <ul id="todoList" class="todo-list"></ul>
+        <button id="deleteOverdueBtn">Delete Overdue Tasks</button>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Fix: Ensure button is assigned event properly
             document.getElementById("addTaskBtn").addEventListener("click", addTask);
+            document.getElementById("deleteOverdueBtn").addEventListener("click", deleteOverdueTasks);
         });
 
         function addTask() {
-            console.log("addTask function called!"); // Debugging line
+            console.log("addTask function called!");
 
             const taskText = document.getElementById("todoInput").value.trim();
             const deadlineDate = document.getElementById("deadlineDate").value;
@@ -118,23 +133,23 @@
                 return;
             }
 
-           const taskItem = document.createElement("li");
-const now = new Date();
-const taskDeadline = new Date(`${deadlineDate}T${deadlineTime}`); // Use backticks for string interpolation
+            const taskItem = document.createElement("li");
+            const now = new Date();
+            const taskDeadline = new Date(`${deadlineDate}T${deadlineTime}`);
 
-let deadlineClass = "";
-let statusMessage = "";
+            let deadlineClass = "";
+            let statusMessage = "";
 
-if (taskDeadline < now) {
-    deadlineClass = "overdue";
-    statusMessage = "Overdue";
-    alert("TASK NOT ACCOMPLISHED: This task is overdue!");
-    notifyUser(`Task "${taskText}" is overdue!`); // Correct template literal here
-} else if ((taskDeadline - now) / (1000 * 60) < 60) {
-    deadlineClass = "due-soon";
-    statusMessage = "Due soon";
-    notifyUser(`Reminder: Task "${taskText}" is due within an hour!`); // Correct template literal here
-}
+            if (taskDeadline < now) {
+                deadlineClass = "overdue";
+                statusMessage = "Overdue";
+                alert("TASK NOT ACCOMPLISHED: This task is overdue!");
+                notifyUser(`Task "${taskText}" is overdue!`);
+            } else if ((taskDeadline - now) / (1000 * 60) < 60) {
+                deadlineClass = "due-soon";
+                statusMessage = "Due soon";
+                notifyUser(`Reminder: Task "${taskText}" is due within an hour!`);
+            }
 
             taskItem.innerHTML = `
                 <span>${taskText} <span class="deadline ${deadlineClass}" data-deadline="${taskDeadline}">(${statusMessage} - Due: ${taskDeadline.toLocaleString()})</span></span>
@@ -149,7 +164,36 @@ if (taskDeadline < now) {
         }
 
         function completeTask(button) {
-            button.parentElement.remove();
+            const taskItem = button.parentElement;
+            const deadlineElement = taskItem.querySelector(".deadline");
+            const taskDeadline = new Date(deadlineElement.getAttribute("data-deadline"));
+            const now = new Date();
+
+            if (taskDeadline >= now) {
+                alert("GOOD JOB!!! 🎉");
+                taskItem.remove();
+            } else {
+                alert("This task is overdue and cannot be removed.");
+            }
+        }
+
+        function deleteOverdueTasks() {
+            const tasks = document.querySelectorAll("#todoList li");
+            let deleted = false;
+
+            tasks.forEach(task => {
+                const deadlineElement = task.querySelector(".deadline");
+                if (deadlineElement.classList.contains("overdue")) {
+                    task.remove();
+                    deleted = true;
+                }
+            });
+
+            if (deleted) {
+                alert("All overdue tasks have been deleted! 🗑️");
+            } else {
+                alert("No overdue tasks found.");
+            }
         }
 
         function sortTasks() {

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Érgo Calendar</title>
+    <style>
+        body {
+            font-family: 'cursive', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #c09ce9, #fad0c4); /* Updated background color */
+            text-align: center;
+        }
+
+        .container {
+            max-width: 700px; /* Increased width */
+            margin: 30px auto;
+            background: #77527C;
+            border-radius: 12px;
+            box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .header button {
+            background: #aa00b0;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .header button:hover {
+            background: #7d0085;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 10px; /* Increased spacing */
+            margin-top: 10px;
+        }
+
+        th, td {
+            width: 14.28%;
+            padding: 25px; /* Increased padding for larger cells */
+            text-align: center;
+            border: 1px solid #f4e4b4;
+            cursor: pointer;
+            background: #ffffff;
+            border-radius: 12px; /* Rounded rectangle */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        th {
+            background: #4E3454;
+            color: white;
+            font-weight: bold;
+            border-radius: 12px;
+        }
+
+        td:hover {
+            background: #ffb9b9; /* Peach color on hover */
+            color: black;
+        }
+
+        .today {
+            background: #eba4de !important;
+            color: #000000 !important;
+            font-weight: bold;
+            border-radius: 12px !important;
+        }
+
+        .event {
+            background: #ff7043 !important;
+            color: white !important;
+            font-weight: bold;
+            border-radius: 12px !important;
+        }
+
+        .weekend {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 style="color: #4E3454; font-size: 4rem; font-weight: bold; text-decoration: underline; text-shadow: 2px 2px 5px #4c4a4a;">Érgo</h1>
+
+    <div class="container">
+        <div class="header">
+            <button onclick="prevMonth()">❮ Prev</button>
+            <h2 id="month-year" style="color: white;"></h2>
+            <button onclick="nextMonth()">Next ❯</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="color: red;">Sun</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th style="color: red;">Sat</th>
+                </tr>
+            </thead>
+            <tbody id="calendar-body"></tbody>
+        </table>
+    </div>
+
+    <script>
+        let currentYear, currentMonth;
+        let events = {}; 
+
+        function generateCalendar(year, month) {
+            const today = new Date();
+            const firstDay = new Date(year, month, 1).getDay();
+            const lastDate = new Date(year, month + 1, 0).getDate();
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            document.getElementById("month-year").textContent = `${monthNames[month]} ${year}`;
+            let calendarHTML = '';
+            let day = 1;
+
+            for (let i = 0; i < 6; i++) {
+                let row = "<tr>";
+                for (let j = 0; j < 7; j++) {
+                    if (i === 0 && j < firstDay) {
+                        row += "<td></td>";
+                    } else if (day > lastDate) {
+                        row += "<td></td>";
+                    } else {
+                        let classes = "";
+                        const dateKey = `${year}-${month + 1}-${day}`;
+
+                        if (today.getFullYear() === year && today.getMonth() === month && today.getDate() === day) {
+                            classes += " today";
+                        }
+                        
+                        if (events[dateKey]) {
+                            classes += " event";
+                        }
+
+                        if (j === 0 || j === 6) {
+                            classes += " weekend";
+                        }
+
+                        row += `<td class="${classes}" onclick="openPopup(${year}, ${month + 1}, ${day})">${day}</td>`;
+                        day++;
+                    }
+                }
+                row += "</tr>";
+                calendarHTML += row;
+                if (day > lastDate) break;
+            }
+
+            document.getElementById("calendar-body").innerHTML = calendarHTML;
+        }
+
+        function prevMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            generateCalendar(currentYear, currentMonth);
+        }
+
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            generateCalendar(currentYear, currentMonth);
+        }
+
+        function initCalendar() {
+            const today = new Date();
+            currentYear = today.getFullYear();
+            currentMonth = today.getMonth();
+            generateCalendar(currentYear, currentMonth);
+        }
+
+        initCalendar();
+    </script>
+
+</body>
+</html>

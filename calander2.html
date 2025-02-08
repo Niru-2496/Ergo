@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Érgo</title>
+    <style>
+        /* Cloudy Sky Gradient Background */
+        body {
+            background: linear-gradient(to bottom, #c09ce9, #fad0c4);
+            height: 100vh;
+            margin: 0;
+            font-family: 'cursive', sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ffffff;
+            font-size: 5.5rem;
+            text-shadow: 2px 2px 5px #6b6b6b;
+            text-decoration: underline;
+            text-decoration-thickness: 3px;
+            text-decoration-style: double;
+        }
+
+        .month {
+            margin: 5px auto;
+            max-width: 100%;
+            width: 90%;
+            background: #9ac4ff79;
+            border-radius: 12px;
+            box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .month h2 {
+            background-color: #713f72;
+            color: #ffffff;
+            padding: 15px;
+            margin: 0;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            table-layout: fixed; /* Prevents the table from becoming too wide */
+        }
+
+        th, td {
+            width: 14.28%;
+            text-align: left;
+            padding: 15px;
+            border: 1px solid #f4e4b4;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        th {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+
+        td:hover {
+            background-color: #f18181;
+            color: white;
+        }
+
+        .today {
+            background-color: #eba4de;
+            color: #000000;
+            font-weight: bold;
+            border-radius: 50%;
+        }
+
+        .weekend {
+            color: #ea9289;
+        }
+
+        .today:hover {
+            background-color: #f2d0ec;
+            color: #000000;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3rem;
+                margin-bottom: 15px;
+            }
+
+            .month {
+                width: 100%;
+                margin: 10px;
+            }
+
+            table {
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            th, td {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            th, td {
+                padding: 8px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Érgo</h1>
+    <div id="calendar"></div>
+
+    <script>
+        function generateYearlyCalendar() {
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            const months = [
+                'January', 'February', 'March', 'April',
+                'May', 'June', 'July', 'August',
+                'September', 'October', 'November', 'December'
+            ];
+
+            let calendarHTML = '';
+
+            for (let month = 0; month < 12; month++) {
+                calendarHTML += `<div class="month"><h2>${months[month]} ${currentYear}</h2>`;
+                calendarHTML += generateMonthlyCalendar(currentYear, month, today);
+                calendarHTML += '</div>';
+            }
+
+            document.getElementById('calendar').innerHTML = calendarHTML;
+        }
+
+        function generateMonthlyCalendar(year, month, today) {
+            const firstDay = new Date(year, month, 1).getDay();
+            const lastDate = new Date(year, month + 1, 0).getDate();
+
+            let calendarHTML = '<table>';
+            calendarHTML += '<thead><tr>';
+
+            // Days of the week
+            const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            for (let i = 0; i < weekdays.length; i++) {
+                calendarHTML += `<th>${weekdays[i]}</th>`;
+            }
+
+            calendarHTML += '</tr></thead><tbody><tr>';
+
+            // Empty spaces before the first day of the month
+            for (let i = 0; i < firstDay; i++) {
+                calendarHTML += '<td></td>';
+            }
+
+            // Days of the month
+            let day = 1;
+            for (let i = firstDay; i < 7; i++) {
+                calendarHTML += createDayCell(day++, year, month, today);
+            }
+
+            calendarHTML += '</tr>';
+
+            // Fill in the remaining days
+            while (day <= lastDate) {
+                calendarHTML += '<tr>';
+                for (let i = 0; i < 7 && day <= lastDate; i++) {
+                    calendarHTML += createDayCell(day++, year, month, today);
+                }
+                calendarHTML += '</tr>';
+            }
+
+            calendarHTML += '</tbody></table>';
+            return calendarHTML;
+        }
+
+        function createDayCell(day, year, month, today) {
+            const currentDay = new Date(year, month, day);
+            let cellClass = '';
+
+            // Highlight the current day
+            if (currentDay.toDateString() === today.toDateString()) {
+                cellClass = 'today';
+            }
+
+            // Highlight weekends (Saturday and Sunday)
+            if (currentDay.getDay() === 0 || currentDay.getDay() === 6) {
+                cellClass += ' weekend';
+            }
+
+            return `<td class="${cellClass}">${day}</td>`;
+        }
+
+        generateYearlyCalendar();
+    </script>
+</body>
+</html>

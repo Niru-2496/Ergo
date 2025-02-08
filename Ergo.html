@@ -1,52 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cloudy Sky Background</title>
+        <style>
+            body {
+                background: linear-gradient(to bottom, #c09ce9, #fad0c4);
+                height: 100vh;
+                margin: 0;
+            }
+        </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yearly Calendar</title>
+    <title>Érgo</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'cursive', sans-serif;
             margin: 20px;
-            background-color: #f9f9f9;
-            color: #333;
+            background-color: #ffffff;
+            color: #000000;
         }
 
         h1 {
-            text-align: center;
-            margin-bottom: 40px;
-            color: #2c3e50;
+            text-align: left;
+            margin-bottom: 20px;
+            color: #0000;
             font-size: 2.5rem;
         }
 
         .month {
-            margin: 20px auto;
-            max-width: 700px;
-            background: #ffffff;
+            margin: 5px auto;
+            max-width: 450px;
+            background: #9ac4ff79;
             border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
         .month h2 {
-            background-color: #3498db;
-            color: #fff;
+            background-color: #713f72;
+            color: #ffffff;
             padding: 15px;
             margin: 0;
             text-align: center;
             font-size: 1.5rem;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
         th, td {
             width: 14.28%;
-            text-align: center;
+            text-align: left;
             padding: 15px;
-            border: 1px solid #ddd;
+            border: 1px solid #f4e4b4;
         }
 
         th {
@@ -62,28 +67,29 @@
         }
 
         td:hover {
-            background-color: #3498db;
+            background-color: #f18181;
             color: white;
         }
 
         .today {
-            background-color: #f1c40f;
-            color: #fff;
+            background-color: #eba4de;
+            color: #000000;
             font-weight: bold;
             border-radius: 50%;
         }
 
         .weekend {
-            color: #e74c3c;
+            color: #ea9289;
         }
 
         .today:hover {
-            background-color: #d4ac0d;
+            background-color: #f2d0ec;
+            color: #000000;
         }
     </style>
 </head>
 <body>
-    <h1>Yearly Calendar</h1>
+    <h1>Érgo</h1>
     <div id="calendar"></div>
 
     <script>

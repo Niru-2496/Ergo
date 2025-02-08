@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Érgo</title>
+    <style>
+body {
+    font-family: 'cursive', sans-serif;
+    margin: 20px;
+    background-color: #ffffff;
+    color: #000000;
+}
+
+h1 {
+    text-align: left;
+    margin-bottom: 20px;
+    color: #0000;
+    font-size: 2.5rem;
+}
+
+.month {
+    margin: 5px 0; /* Remove the centering of the month box */
+    max-width: 450px;
+    background: #d857ff89;
+    border-radius: 12px;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: block; /* Ensure the month container takes full width */
+}
+
+.month h2 {
+    background-color: #aa00b0;
+    color: #622366b3;
+    padding: 15px;
+    margin: 0;
+    text-align: center;
+    font-size: 1.5rem;
+    border-top-left-radius: 12px; /* Rounded top-left corner */
+    border-top-right-radius: 12px; /* Rounded top-right corner */
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px; /* Rounded corners for the table */
+    overflow: hidden;
+    margin: 0; /* Align to the left */
+}
+
+th, td {
+    width: 14.28%;
+    text-align: left;
+    padding: 15px;
+    border: 1px solid #f4e4b4;
+    border-radius: 8px; /* Rounded corners for the cells */
+}
+
+th {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+td {
+    background-color: #ffffff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+}
+
+td:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+.today {
+    background-color: #eba4de;
+    color: #000000;
+    font-weight: bold;
+    border-radius: 50%;
+}
+
+.weekend {
+    color: #ea9289;
+}
+
+.today:hover {
+    background-color: #f2d0ec;
+    color: #000000;
+}

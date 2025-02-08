@@ -1,26 +1,26 @@
-# [Project Name] 🎯
+# ERGO🎯
 
 
 ## Basic Details
-### Team Name: [Name]
+### Team Name: [Cybrox]
 
 
 ### Team Members
-- Member 1: [Name] - [College]
-- Member 2: [Name] - [College]
-- Member 3: [Name] - [College]
+- Member 1: [Nirupama V] - [SCMS School of Engineering and Technology]
+- Member 2: [K Archisha Nair] - [SCMS School of Engineering and Technology]
+- Member 3: [Nandana Satheesh] - [SCMS School of Engineering and Technology]
 
 ### Hosted Project Link
 [mention your project hosted project link here]
 
 ### Project Description
-[2-3 lines about what your project does]
+[It is a calender cum to-do list website with Auto prioritizing mode to complete deadlines ]
 
 ### The Problem statement
-[What ridiculous problem are you solving?]
+[Many individuals struggle to manage their time effectively, leading to missed deadlines, increased stress, and decreased productivity. Traditional calendars and to-do lists often require manual prioritization, which can be time-consuming and may not always reflect the urgency or importance of tasks.]
 
 ### The Solution
-[How are you solving it? Keep it fun!]
+[So we're here to solve this using an auto prioritizing mode. We can complete our deadlines without having to worry about missing it! We will keep you motivated with great quotes and pop ups. So have fun using ERGO!!!]
 
 ## Technical Details
 ### Technologies/Components Used

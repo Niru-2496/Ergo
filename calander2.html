@@ -3,216 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Érgo</title>
+    <title>Érgo Calendar</title>
     <style>
-        /* Cloudy Sky Gradient Background */
         body {
-            background: linear-gradient(to bottom, #c09ce9, #fad0c4);
-            height: 100vh;
-            margin: 0;
             font-family: 'cursive', sans-serif;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #ffffff;
-            font-size: 5.5rem;
-            text-shadow: 2px 2px 5px #6b6b6b;
-            text-decoration: underline;
-            text-decoration-thickness: 3px;
-            text-decoration-style: double;
-        }
-
-        .month {
-            margin: 5px auto;
-            max-width: 100%;
-            width: 90%;
-            background: #bb96e195;
-            border-radius: 12px;
-            box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .month h2 {
-            background-color: #713f72;
-            color: #ffffff;
-            padding: 15px;
             margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #c09ce9, #fad0c4); /* Updated background color */
             text-align: center;
-            font-size: 1.5rem;
+        }
+
+        .container {
+            max-width: 700px; /* Increased width */
+            margin: 30px auto;
+            background: #77527C;
+            border-radius: 12px;
+            box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .header button {
+            background: #aa00b0;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .header button:hover {
+            background: #7d0085;
         }
 
         table {
             width: 100%;
             border-collapse: separate;
-            border-spacing: 3px;
-            border-radius: 12px;
-            overflow: hidden;
-            table-layout: fixed; /* Prevents the table from becoming too wide */
+            border-spacing: 10px; /* Increased spacing */
+            margin-top: 10px;
         }
 
         th, td {
             width: 14.28%;
-            text-align: left;
-            padding: 15px;
+            padding: 25px; /* Increased padding for larger cells */
+            text-align: center;
             border: 1px solid #f4e4b4;
+            cursor: pointer;
+            background: #ffffff;
+            border-radius: 12px; /* Rounded rectangle */
             transition: background-color 0.3s ease, color 0.3s ease;
-            border-radius: 12px;
         }
 
         th {
-            background-color: #ecf0f1;
-            color: #2c3e50;
+            background: #4E3454;
+            color: white;
             font-weight: bold;
-        }
-
-        td {
-            background-color: #ffffff;
-            cursor: pointer;
+            border-radius: 12px;
         }
 
         td:hover {
-            background-color: #f18181;
-            color: white;
+            background: #ffb9b9; /* Peach color on hover */
+            color: black;
         }
 
         .today {
-            background-color: #eba4de;
-            color: #000000;
+            background: #eba4de !important;
+            color: #000000 !important;
             font-weight: bold;
-            border-radius: 50%;
+            border-radius: 12px !important;
+        }
+
+        .event {
+            background: #ff7043 !important;
+            color: white !important;
+            font-weight: bold;
+            border-radius: 12px !important;
         }
 
         .weekend {
-            color: #ea9289;
-        }
-
-        .today:hover {
-            background-color: #f2d0ec;
-            color: #000000;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 3rem;
-                margin-bottom: 15px;
-            }
-
-            .month {
-                width: 100%;
-                margin: 10px;
-            }
-
-            table {
-                width: 100%;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            th, td {
-                padding: 10px;
-                font-size: 0.9rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-
-            th, td {
-                padding: 8px;
-                font-size: 0.8rem;
-            }
+            color: red;
         }
     </style>
 </head>
 <body>
-    <h1>Érgo</h1>
-    <div id="calendar"></div>
+
+    <h1 style="color: #4E3454; font-size: 4rem; font-weight: bold; text-decoration: underline; text-shadow: 2px 2px 5px #4c4a4a;">Érgo</h1>
+
+    <div class="container">
+        <div class="header">
+            <button onclick="prevMonth()">❮ Prev</button>
+            <h2 id="month-year" style="color: white;"></h2>
+            <button onclick="nextMonth()">Next ❯</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="color: red;">Sun</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th style="color: red;">Sat</th>
+                </tr>
+            </thead>
+            <tbody id="calendar-body"></tbody>
+        </table>
+    </div>
 
     <script>
-        function generateYearlyCalendar() {
+        let currentYear, currentMonth;
+        let events = {}; 
+
+        function generateCalendar(year, month) {
             const today = new Date();
-            const currentYear = today.getFullYear();
-            const months = [
-                'January', 'February', 'March', 'April',
-                'May', 'June', 'July', 'August',
-                'September', 'October', 'November', 'December'
-            ];
-
-            let calendarHTML = '';
-
-            for (let month = 0; month < 12; month++) {
-                calendarHTML += `<div class="month"><h2>${months[month]} ${currentYear}</h2>`;
-                calendarHTML += generateMonthlyCalendar(currentYear, month, today);
-                calendarHTML += '</div>';
-            }
-
-            document.getElementById('calendar').innerHTML = calendarHTML;
-        }
-
-        function generateMonthlyCalendar(year, month, today) {
             const firstDay = new Date(year, month, 1).getDay();
             const lastDate = new Date(year, month + 1, 0).getDate();
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-            let calendarHTML = '<table>';
-            calendarHTML += '<thead><tr>';
-
-            // Days of the week
-            const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            for (let i = 0; i < weekdays.length; i++) {
-                calendarHTML += `<th>${weekdays[i]}</th>`;
-            }
-
-            calendarHTML += '</tr></thead><tbody><tr>';
-
-            // Empty spaces before the first day of the month
-            for (let i = 0; i < firstDay; i++) {
-                calendarHTML += '<td></td>';
-            }
-
-            // Days of the month
+            document.getElementById("month-year").textContent = `${monthNames[month]} ${year}`;
+            let calendarHTML = '';
             let day = 1;
-            for (let i = firstDay; i < 7; i++) {
-                calendarHTML += createDayCell(day++, year, month, today);
-            }
 
-            calendarHTML += '</tr>';
+            for (let i = 0; i < 6; i++) {
+                let row = "<tr>";
+                for (let j = 0; j < 7; j++) {
+                    if (i === 0 && j < firstDay) {
+                        row += "<td></td>";
+                    } else if (day > lastDate) {
+                        row += "<td></td>";
+                    } else {
+                        let classes = "";
+                        const dateKey = `${year}-${month + 1}-${day}`;
 
-            // Fill in the remaining days
-            while (day <= lastDate) {
-                calendarHTML += '<tr>';
-                for (let i = 0; i < 7 && day <= lastDate; i++) {
-                    calendarHTML += createDayCell(day++, year, month, today);
+                        if (today.getFullYear() === year && today.getMonth() === month && today.getDate() === day) {
+                            classes += " today";
+                        }
+                        
+                        if (events[dateKey]) {
+                            classes += " event";
+                        }
+
+                        if (j === 0 || j === 6) {
+                            classes += " weekend";
+                        }
+
+                        row += `<td class="${classes}" onclick="openPopup(${year}, ${month + 1}, ${day})">${day}</td>`;
+                        day++;
+                    }
                 }
-                calendarHTML += '</tr>';
+                row += "</tr>";
+                calendarHTML += row;
+                if (day > lastDate) break;
             }
 
-            calendarHTML += '</tbody></table>';
-            return calendarHTML;
+            document.getElementById("calendar-body").innerHTML = calendarHTML;
         }
 
-        function createDayCell(day, year, month, today) {
-            const currentDay = new Date(year, month, day);
-            let cellClass = '';
-
-            // Highlight the current day
-            if (currentDay.toDateString() === today.toDateString()) {
-                cellClass = 'today';
+        function prevMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
             }
-
-            // Highlight weekends (Saturday and Sunday)
-            if (currentDay.getDay() === 0 || currentDay.getDay() === 6) {
-                cellClass += ' weekend';
-            }
-
-            return `<td class="${cellClass}">${day}</td>`;
+            generateCalendar(currentYear, currentMonth);
         }
 
-        generateYearlyCalendar();
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            generateCalendar(currentYear, currentMonth);
+        }
+
+        function initCalendar() {
+            const today = new Date();
+            currentYear = today.getFullYear();
+            currentMonth = today.getMonth();
+            generateCalendar(currentYear, currentMonth);
+        }
+
+        initCalendar();
     </script>
+
 </body>
 </html>

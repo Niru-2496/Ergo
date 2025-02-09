@@ -4,7 +4,6 @@
 ## Basic Details
 ### Team Name: [Cybrox]
 
-
 ### Team Members
 - Member 1: [Nirupama V] - [SCMS School of Engineering and Technology]
 - Member 2: [K Archisha Nair] - [SCMS School of Engineering and Technology]

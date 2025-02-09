@@ -18,8 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
         let month = currentDate.getMonth();
 
         // Ensure year stays between 2025 and 2035
-        if (year < 2025) currentDate.setFullYear(2025);
-        if (year > 2035) currentDate.setFullYear(2035);
+        if (year < 1600) currentDate.setFullYear(1600);
+        if (year > 3075) currentDate.setFullYear(3075);
 
         monthYear.innerText = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
 
@@ -78,8 +78,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         let selectedYear = new Date(taskDateValue).getFullYear();
-        if (selectedYear < 2025 || selectedYear > 2035) {
-            return alert("Please select a date between 2025 and 2035!");
+        if (selectedYear < 1600 || selectedYear > 3075) {
+            return alert("Please select a date between 1600 and 3075!");
         }
 
         tasks.push({ name: taskName, date: taskDateValue, time: taskTimeValue });
